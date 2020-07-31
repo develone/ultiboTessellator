@@ -153,11 +153,12 @@ const GLchar *vertexShaderSource =
  "attribute vec4 vColor;                                \n" 
  "varying vec4 vertColor;                               \n"
  "uniform mat4 orthoproj;                               \n"
+ "uniform mat4 rotation;                                \n"
  "uniform mat4 transforms;                              \n"
  "void main()                                           \n"
  "{                                                     \n"
  " vertColor = vColor;                                  \n"//vec4(1.0, 0.0, 1.0, 1.0);                                  \n" 
- " gl_Position = orthoproj * transforms *  vec4(vPosition.x, vPosition.y, 0, 1) ; \n"
+ " gl_Position = orthoproj * transforms * rotation * vec4(vPosition.x, vPosition.y, 0, 1) ; \n"
  "} \n";
 
  const GLchar *fragmentShaderSource =
@@ -265,16 +266,30 @@ void svgTessellator_main()
  
 	while(1)
 	{
+GLfloat rotate[4][4] = {
+        {1.0f, 0.0f, 0.0f, 0.0f},
+        {0.0f, 1.0f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 1.0f, 0.0f},
+        {0.0f, 0.0f, 0.0f, 1.0f},
+    };
+
+    GLfloat rad_angle = rotation * M_PI/180;
+
+    rotate[0][0] = cos(rad_angle);
+    rotate[1][0] = -sin(rad_angle);
+    rotate[0][1] = sin(rad_angle);
+    rotate[1][1] = cos(rad_angle);		
+		
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         //glClear(GL_COLOR_BUFFER_BIT);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
 		
 	    getMouseXY(&PanelMouseX, &PanelMouseY, &ButtonsMouse);
-        //MainLoop((void*)ctx); // here is the gui code		
+        MainLoop((void*)ctx); // here is the gui code		
 		
 		if(ButtonsMouse == 2)
 		{	
-	     rotation++;          
+	     rotation+=15;         
 		}
 
 		if(ButtonsMouse == 3)
@@ -286,24 +301,36 @@ void svgTessellator_main()
 
         translatesvgCont(&svgFileLoadTest, (GLfloat)PanelMouseX, (GLfloat)PanelMouseY);
 
-        if(ButtonsMouse == 1)
-		scalesvgCont(&svgFileLoadTest,(GLfloat)2.5,(GLfloat)2.5);			
-		else
-		scalesvgCont(&svgFileLoadTest,(GLfloat)1.0f,(GLfloat)1.0f);		
+        //if(ButtonsMouse == 1)
+		//scalesvgCont(&svgFileLoadTest,(GLfloat)2.5,(GLfloat)2.5);			
+		//else
+		//scalesvgCont(&svgFileLoadTest,(GLfloat)1.0f,(GLfloat)1.0f);		
 
 
         glUseProgram(shaderProgram);
 		GLint uniTrans = glGetUniformLocation(shaderProgram, "orthoproj");
 		GLint mulTrans = glGetUniformLocation(shaderProgram, "transforms");
+		GLint rotTrans = glGetUniformLocation(shaderProgram, "rotation");
         glUniformMatrix4fv(uniTrans, 1, GL_FALSE, &ortho[0][0]);
+		glUniformMatrix4fv(rotTrans, 1, GL_FALSE, &rotate[0][0]);//&svgFileLoadTest.transforms[0][0]);
 		glUniformMatrix4fv(mulTrans, 1, GL_FALSE, &svgFileLoadTest.transforms[0][0]);
+		
+		glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+		glVertexAttribPointer(positionLoc, 2, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        glEnableVertexAttribArray(positionLoc);
+		
+		glBindBuffer(GL_ARRAY_BUFFER, VBO2);		
+		glVertexAttribPointer(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
+        glEnableVertexAttribArray(colorLoc);
 		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO1);
         //glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);		
 		glDrawElements(GL_TRIANGLES,svgFileLoadTest.start , GL_UNSIGNED_SHORT,(void*)svgFileLoadTest.end);
         glUseProgram(0);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);		
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        glDisable(GL_BLEND);
+        glDisable(GL_SCISSOR_TEST);		
 		
         
 	  glSwapBuffer();
@@ -390,7 +417,7 @@ for (shape = SVGFile->shapes; shape != NULL; shape = shape->next) {
  glVertexAttribPointer(colorLoc, 4, GL_FLOAT, GL_FALSE, 0, (void*)0);
  glEnableVertexAttribArray(colorLoc);
 
- glBindBuffer(GL_ARRAY_BUFFER, 0);
+ //glBindBuffer(GL_ARRAY_BUFFER, 0);
  //glBindVertexArray(0);
 
  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, oglElementBuff);
@@ -441,6 +468,15 @@ int rotatesvgCont(svgContainer *svgFileContainer, GLfloat angle)
 
 int translatesvgCont(svgContainer *svgFileContainer, GLfloat x, GLfloat y)
 {
+  GLfloat identity [4][4] = {
+        {1.0f, 0.0f, 0.0f, 0.0f},
+        {0.0f, 1.0f, 0.0f, 0.0f},
+        {0.0f, 0.0f, 1.0f, 0.0f},
+        {0.0f, 0.0f, 0.0f, 1.0f},
+    };
+  
+   memcpy(svgFileContainer->transforms,identity, 4*4*sizeof(GLfloat));	
+	
   svgFileContainer->transforms[3][0] = x;
   svgFileContainer->transforms[3][1] = y;
 }
