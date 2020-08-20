@@ -7,8 +7,8 @@
  
 #include <stdio.h>
 
-#include "/opt/vc/include/GLES/gl.h"
-#include "/opt/vc/include/GLES2/gl2.h"
+#include "opt/vc/include/GLES/gl.h"
+#include "opt/vc/include/GLES2/gl2.h"
 
 
 #define NK_INCLUDE_FIXED_TYPES
@@ -34,6 +34,8 @@
 #define MAX(a,b) ((a) < (b) ? (b) : (a))
 #define LEN(a) (sizeof(a)/sizeof(a)[0])
 
+
+#define NK_ULTIBO_GLES2_IMPLEMENTATION
 #include "nuklear/nuklear.h"
 #include "nuklear_ultibo_gles2.h"
 
@@ -91,8 +93,9 @@ char CoordBuufer[10] = {0};
 char buf[256] = {0};
 
 // gui code
-static void
-MainLoop(void* loopArg);
+//static void
+//MainLoop(void* loopArg);
+static void nuklear_MainLoop(void* loopArg);
 //-------------------------------------------------------------------------------------------------
 
 
@@ -194,7 +197,7 @@ void ultibo_C_main()
     LoadsvgFile( &svgFileLoadTest, VBO1, VBO2, EBO1, "example\\23ftCenter.svg" );
      ///--------------------------------------------nuklear init
 	 
-    ctx = nk_gen_init();
+    ctx = nk_ultibo_init();
     /* Load Fonts: if none of these are loaded a default font will be used  */
     /* Load Cursor: if you uncomment cursor loading please hide the cursor */
     {struct nk_font_atlas *atlas;
@@ -233,7 +236,7 @@ GLfloat rotate[4][4] = {
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
 		
 	    getMouseXY(&PanelMouseX, &PanelMouseY, &ButtonsMouse);
-      nuklear_MainLoop((void*)ctx); // here is the gui code			
+        nuklear_MainLoop((void*)ctx); // here is the gui code			
 		
 		if(ButtonsMouse == 2)
 		{	
@@ -453,8 +456,7 @@ int resetsvgCont(svgContainer *svgFileContainer)
 //------------------------------------------------------------------------------------------------
 
 
-//static void
-nuklear_MainLoop(void* loopArg){
+static void nuklear_MainLoop(void* loopArg){
     
 	struct nk_context *ctx = (struct nk_context *)loopArg;
 
