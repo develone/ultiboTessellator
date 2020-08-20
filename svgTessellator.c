@@ -120,7 +120,7 @@ const GLchar *vertexShaderSource =
 GLuint VBO1,VBO2, EBO1;
 int shaderProgram ;
 
-void svgTessellator_main()
+void ultibo_C_main()
 {
     getScreenSize(&ScreenWidth, &ScreenHeight);
 	

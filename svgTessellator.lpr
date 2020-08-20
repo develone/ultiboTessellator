@@ -22,7 +22,7 @@ uses
   Threads,
   Console,
   SysUtils,
-  GLES2Unit,    {To keep things clearer all the code for this example is in the separate GLES2Unit}
+  ultiboGLES2C,    {To keep things clearer all the code for this example is in the separate GLES2Unit}
   VC4;          {Include the VC4 unit to enable access to the GPU}
 
 
