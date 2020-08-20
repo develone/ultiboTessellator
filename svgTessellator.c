@@ -235,8 +235,10 @@ GLfloat rotate[4][4] = {
         //glClear(GL_COLOR_BUFFER_BIT);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
 		
-	    getMouseXY(&PanelMouseX, &PanelMouseY, &ButtonsMouse);
-        nuklear_MainLoop((void*)ctx); // here is the gui code			
+	  getMouseXY(&PanelMouseX, &PanelMouseY, &ButtonsMouse);
+
+    nuklear_MainLoop((void*)ctx); // here is the gui code			
+
 		
 		if(ButtonsMouse == 2)
 		{	
@@ -454,6 +456,7 @@ int resetsvgCont(svgContainer *svgFileContainer)
 
 
 //------------------------------------------------------------------------------------------------
+
 
 
 static void nuklear_MainLoop(void* loopArg){
