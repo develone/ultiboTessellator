@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Compiler Value="C:\Ultibo\Core\fpc\3.1.1\bin\i386-win32\fpc.exe" Date="1210472906"/>
-  <Params Value=" -Tultibo -Parm -CpARMV7A -WpRPI3B @C:\Ultibo\Core\fpc\3.1.1\bin\i386-win32\RPI3.CFG -MObjFPC -Scghi -CX -O2 -XX -l -vewnhibq -FiC:\ArmCompiler\OpenGL\lib\arm-ultibo -FuC:\ArmCompiler\OpenGL\ -FUC:\ArmCompiler\OpenGL\lib\arm-ultibo\ svgTessellator.lpr"/>
+  <Compiler Value="/home/devel/ultibo/core/fpc/bin/fpc" Date="1597093988"/>
+  <Params Value=" -Tultibo -Parm -CpARMV7A -WpRPI3B @/home/devel/ultibo/core/fpc/bin/RPI3.CFG -MObjFPC -Scghi -CX -O2 -XX -l -vewnhibq -Fi/home/devel/ultiboTessellator/lib/arm-ultibo -Fu/home/devel/ultiboTessellator/ -FU/home/devel/ultiboTessellator/lib/arm-ultibo/ svgTessellator.lpr"/>
 </CONFIG>
