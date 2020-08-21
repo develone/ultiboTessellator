@@ -1,0 +1,32 @@
+This is after the pull request.
+
+git remote add upstream https://github.com/cejasmasmas/ultiboTessellator.git
+
+git fetch upstream
+
+git merge upstream/master
+
+[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+[remote "origin"]
+        url = https://github.com/develone/ultiboTessellator.git
+        fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "master"]
+        remote = origin
+        merge = refs/heads/master
+[remote "upstream"]
+        url = https://github.com/cejasmasmas/ultiboTessellator.git
+        fetch = +refs/heads/*:refs/remotes/upstream/*
+
+cp ~/Ultibo_Projects/Tesselator/RPi3/compile.sh .
+
+git add compile.sh
+
+Added / 
+#include "/opt/vc/include/GLES/gl.h"
+#include "/opt/vc/include/GLES2/gl2.h" 
+
+git push
